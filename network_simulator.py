@@ -217,6 +217,9 @@ class Network(object):
                     print( num_to_remove , " nodes will be removed")
                     self.nodes_added = 0  # reset after processing
                     self.remove_random_node(num_to_remove)
+                self.g_f = gc.directed_fee_graph(self.g, self.tx_amt, exclude_edges=True, multi_graph=False)
+                max_comp = max(nx.strongly_connected_components(self.g_f), key=len)
+                self.g_f = self.g_f.subgraph(max_comp).copy()
                 print("evaluate graph centralization...")
                 evaluate_graph_centralization(self.g_f, self.file)
                 # test transaction success rate in the network:
